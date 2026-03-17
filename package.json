@@ -1,0 +1,52 @@
+{
+  "name": "agent-explainable-ui",
+  "version": "0.1.0",
+  "description": "React components for visualizing agentfootprint execution — conversations, tokens, tools, costs, quality",
+  "license": "MIT",
+  "author": "Sanjay Krishna Anbalagan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/footprintjs/agent-explainable-ui.git"
+  },
+  "keywords": [
+    "agent",
+    "explainable-ai",
+    "react",
+    "visualization",
+    "llm",
+    "observability",
+    "agentfootprint"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "test": "vitest run"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist/**/*"],
+  "sideEffects": false,
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsup": "^8.4.0",
+    "typescript": "~5.4.5",
+    "vitest": "^4.0.18",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  }
+}
