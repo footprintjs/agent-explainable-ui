@@ -20,6 +20,7 @@
   "type": "module",
   "scripts": {
     "build": "tsup",
+    "prepare": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "test": "vitest run"
