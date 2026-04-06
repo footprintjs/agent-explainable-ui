@@ -214,4 +214,151 @@ interface AgentExplainableShellProps extends BaseComponentProps {
 }
 declare function AgentExplainableShell({ snapshot, defaultTab, size, unstyled, className, style, }: AgentExplainableShellProps): react_jsx_runtime.JSX.Element;
 
-export { AgentExplainableShell, type AgentExplainableShellProps, type AgentSnapshot, AgentTheme, type AgentThemeProps, type BaseComponentProps, ConversationView, type ConversationViewProps, CostPanel, type CostPanelProps, type CostSnapshot, GuardrailPanel, type GuardrailPanelProps, type GuardrailSnapshot, type MessageSnapshot, QualityPanel, type QualityPanelProps, type QualitySnapshot, type Size, type ThemeTokens, TokenChart, type TokenChartProps, type TokenSnapshot, type ToolCallSnapshot, ToolUsagePanel, type ToolUsagePanelProps, type ToolUsageSnapshot, type TurnSnapshot, coolDark, coolLight, defaultTokens, themePresets, tokensToCSSVars, useAgentTheme, warmDark };
+interface TagData {
+    id: string;
+    label: string;
+    entries: Array<{
+        type: string;
+        stageId?: string;
+        stageName: string;
+        description?: string;
+        chosen?: string;
+    }>;
+    timestamp: number;
+    index: number;
+}
+interface TagTimelineProps extends BaseComponentProps {
+    tags: TagData[];
+    selectedTagId?: string;
+    onSelectTag?: (tagId: string) => void;
+}
+declare function TagTimeline({ tags, selectedTagId, onSelectTag, size, unstyled, className, style, }: TagTimelineProps): react_jsx_runtime.JSX.Element | null;
+
+interface TagFlowchartProps extends BaseComponentProps {
+    tags: TagData[];
+    selectedIndex: number;
+    onSelectIndex: (index: number) => void;
+}
+declare function TagFlowchart({ tags, selectedIndex, onSelectIndex, unstyled, className, style, }: TagFlowchartProps): react_jsx_runtime.JSX.Element | null;
+
+/**
+ * Adapter: agentfootprint → AgentSnapshot
+ *
+ * Converts agentfootprint execution data (AgentResult + recorders + narrative)
+ * into the AgentSnapshot shape that UI components consume.
+ *
+ * Usage:
+ *   import { toAgentSnapshot } from 'agent-explainable-ui/adapters';
+ *
+ *   const result = await agent.run('hello');
+ *   const snapshot = toAgentSnapshot({
+ *     result,
+ *     narrative: agent.getNarrativeEntries(),
+ *     snapshot: agent.getSnapshot(),
+ *     recorders: { tokens, cost, toolUsage, quality, guardrails },
+ *   });
+ *
+ *   <AgentExplainableShell snapshot={snapshot} />
+ */
+
+interface AgentfootprintInput {
+    /** Result from agent.run() */
+    result: {
+        content: string;
+        messages: Array<{
+            role: string;
+            content: string;
+            toolCallId?: string;
+        }>;
+        iterations: number;
+        paused?: boolean;
+    };
+    /** Agent name/concept */
+    agentName?: string;
+    concept?: 'LLMCall' | 'Agent' | 'RAG' | 'FlowChart' | 'Swarm';
+    /** Duration in ms */
+    durationMs?: number;
+    /** Recorder outputs (all optional) */
+    recorders?: {
+        tokens?: {
+            getStats: () => {
+                totalCalls: number;
+                totalInputTokens: number;
+                totalOutputTokens: number;
+                calls?: Array<{
+                    inputTokens: number;
+                    outputTokens: number;
+                    turnNumber?: number;
+                }>;
+            };
+        };
+        cost?: {
+            getTotalCost: () => number;
+            getEntries?: () => Array<{
+                totalCost: number;
+                turnNumber?: number;
+            }>;
+        };
+        toolUsage?: {
+            getStats: () => {
+                totalCalls: number;
+                totalErrors: number;
+                byTool: Record<string, {
+                    calls: number;
+                    errors: number;
+                    averageLatencyMs?: number;
+                }>;
+            };
+        };
+        quality?: {
+            getScores: () => Array<{
+                score: number;
+                label?: string;
+                turnNumber?: number;
+            }>;
+            getAverageScore: () => number;
+        };
+        guardrails?: {
+            getViolations: () => Array<{
+                rule: string;
+                severity: string;
+                message: string;
+                turnNumber?: number;
+            }>;
+            hasViolations: () => boolean;
+        };
+    };
+}
+declare function toAgentSnapshot(input: AgentfootprintInput): AgentSnapshot;
+
+/**
+ * Filter a flowchart spec to only show tagged nodes.
+ *
+ * Takes the full engine spec and a list of tags. Returns a simplified spec
+ * where only tag-level nodes appear. Non-tagged stages are collapsed —
+ * arrows skip from one tagged node to the next.
+ */
+
+interface SpecNode {
+    name: string;
+    id: string;
+    type?: string;
+    description?: string;
+    next?: SpecNode;
+    children?: SpecNode[];
+    hasDecider?: boolean;
+    isPausable?: boolean;
+    [key: string]: unknown;
+}
+/**
+ * Generate a tag-level flowchart spec from tags.
+ *
+ * Instead of filtering the existing spec (which is complex with deciders,
+ * subflows, branches), we BUILD a new linear spec from the tag list.
+ * Each tag becomes a node. Nodes are linked linearly.
+ *
+ * This is simpler and works regardless of the underlying flowchart topology.
+ */
+declare function tagsToSpec(tags: TagData[]): SpecNode | null;
+
+export { AgentExplainableShell, type AgentExplainableShellProps, type AgentSnapshot, AgentTheme, type AgentThemeProps, type AgentfootprintInput, type BaseComponentProps, ConversationView, type ConversationViewProps, CostPanel, type CostPanelProps, type CostSnapshot, GuardrailPanel, type GuardrailPanelProps, type GuardrailSnapshot, type MessageSnapshot, QualityPanel, type QualityPanelProps, type QualitySnapshot, type Size, type TagData, TagFlowchart, type TagFlowchartProps, TagTimeline, type TagTimelineProps, type ThemeTokens, TokenChart, type TokenChartProps, type TokenSnapshot, type ToolCallSnapshot, ToolUsagePanel, type ToolUsagePanelProps, type ToolUsageSnapshot, type TurnSnapshot, coolDark, coolLight, defaultTokens, tagsToSpec, themePresets, toAgentSnapshot, tokensToCSSVars, useAgentTheme, warmDark };

@@ -27,9 +27,18 @@ export {
   QualityPanel,
   GuardrailPanel,
   AgentExplainableShell,
+  TagTimeline,
+  TagFlowchart,
 } from './components';
 
+// ── Adapters ────────────────────────────────────────────────
+export { toAgentSnapshot, tagsToSpec } from './adapters';
+export type { AgentfootprintInput } from './adapters';
+
 export type {
+  TagTimelineProps,
+  TagFlowchartProps,
+  TagData,
   ConversationViewProps,
   TokenChartProps,
   ToolUsagePanelProps,
