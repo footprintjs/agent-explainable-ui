@@ -1,7 +1,7 @@
 {
   "name": "agent-explainable-ui",
   "version": "0.1.0",
-  "description": "React components for recorded agent conversations, token and cost metrics, tool activity, quality scores and guardrail reports.",
+  "description": "Beta: React components for recorded agent conversations, token and cost metrics, tool activity, quality scores and guardrail reports.",
   "license": "MIT",
   "author": "Sanjay Krishna Anbalagan",
   "repository": {
@@ -15,7 +15,8 @@
     "conversation",
     "token-usage",
     "visualization",
-    "execution-trace"
+    "execution-trace",
+    "beta"
   ],
   "type": "module",
   "scripts": {

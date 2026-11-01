@@ -1,5 +1,7 @@
 # agent-explainable-ui
 
+**Beta — APIs may change. Not published on npm; use the source setup below.**
+
 React components for developers displaying recorded agent conversations, token usage, costs and tool activity. Optional quality and guardrail panels display supplied recorder results; they do not evaluate a model themselves.
 
 **Source-only package:** there is currently no npm registry publication. Build this checkout to try the components. React and React DOM 18 or later are the declared peers.
